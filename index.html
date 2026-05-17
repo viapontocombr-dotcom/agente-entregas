@@ -376,7 +376,7 @@
         
         // Envia mensagem via WhatsApp
         async function sendMessage() {
-            const phone = phoneInput.value.replace(/\D/g, '');
+            let phone = phoneInput.value.replace(/\D/g, '');
             const name = nameInput.value.trim();
             
             if (!phone) {
@@ -384,8 +384,17 @@
                 return;
             }
             
-            if (phone.length < 10) {
-                alert('Número inválido. Inclua o DDD (ex: 65999990000)');
+            // Adiciona código do país 55 (Brasil) se não tiver
+            if (phone.length === 10 || phone.length === 11) {
+                // Formato: 65999990000 ou 65999990000 → adiciona 55
+                phone = '55' + phone;
+            } else if (!phone.startsWith('55')) {
+                alert('Número inválido. Use DDD + número (ex: 65999990000)');
+                return;
+            }
+            
+            if (phone.length < 12) {
+                alert('Número inválido. Verifique o DDD e número');
                 return;
             }
             
